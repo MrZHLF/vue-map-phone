@@ -18,7 +18,7 @@
 	|——— package.json #项目配置文件
 	|——— babel.config.js #babel配置文件
 	|——— vue.config.js #vue配置文件
-	|___ README.md    #项目的说明文档，markdown 格式
+	|___ README.md    #项目的说明文档
 ```
 
 # 技术栈
