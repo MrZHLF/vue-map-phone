@@ -64,8 +64,8 @@
 					this.validateBtn()
 					//发送网络请求
 					this.$axios.post('/api/posts/sms_send',{
-						tpl_id: "", //填写自己的 聚合数据
-            key: "", //填写自己的  聚合数据
+						tpl_id: "140861",
+            key: "57bcfb3cf8f86742e90c1809a6590890",
 						phone:this.phone
 					}).then(res => {
 						console.log(res)

@@ -91,7 +91,7 @@ export default {
                     return item.name.indexOf(this.city_val) != -1
                 })
             }
-            console.log(this.searchList)
+            // console.log(this.searchList)
             
         }
     },

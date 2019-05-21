@@ -1,6 +1,9 @@
 <template>
   <div class="index">
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+    
     <tab-bar :dataArray="tabBar"/>
   </div>
 </template>
@@ -28,9 +31,6 @@ export default {
 <style scoped>
 .index {
   width: 100%;
-  max-width: 640px;
-  min-width: 320px;
   height: calc(100% - 45px);
-  margin: 0 auto;
 }
 </style>
