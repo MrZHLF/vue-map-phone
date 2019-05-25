@@ -79,15 +79,14 @@ export default {
     },
     methods: {
       filterSort(index) {
-        // console.log(index)
         //点击字体加粗
         this.currentFilter = index;
     //点击导航蒙版是显示
         switch(index){
           case 0:
           // 配送最快
+          this.isScreen=false;
             this.isScrt=true;
-            this.isScreen=false;
             this.$emit('searchFixed',true); //点击传值home组件
             break;
           case 1:
@@ -102,8 +101,8 @@ export default {
             break;
           case 3:
           // 筛选
-            this.isScrt=false;
             this.isScreen=true;
+            this.isScrt=false;
             this.$emit('searchFixed',true); //点击传值home组件
             break;
           default:
@@ -160,6 +159,7 @@ export default {
             if(item.select) {
               if(screen.id !== 'MPI'){
                 //单选
+                screenData[screen.id] = item.code;
               } else {
                 //多选
                 mpiStr += item.code + ','
