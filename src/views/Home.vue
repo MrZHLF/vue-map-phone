@@ -108,6 +108,7 @@ export default {
      this.bottomPullText = "上拉加载更多"
      this.$axios.post(`/api/profile/restaurants/${this.page}/${this.size}`,this.data).then(res =>{
         this.restaurants = res.data;
+        console.log(res)
         this.$refs.loadmore.onTopLoaded();
       })
     },

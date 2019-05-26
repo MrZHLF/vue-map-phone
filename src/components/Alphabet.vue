@@ -43,7 +43,11 @@ export default {
     name:"alpabet",
     props:{
         cityInfo: Object,
-        keys: Array
+        keys: {
+            // default: function () { return [] }
+            type: Array,
+            default: () => []
+        }
     },
     data() {
         return {
