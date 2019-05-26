@@ -18,19 +18,30 @@
         <span>{{shopInfo.rst.name}}</span>
         <i class="fa fa-caret-right"></i>
       </div>
+      <!-- 弹窗信息 -->
+      <InfoModel :rst="shopInfo.rst" :showInfoModel="showInfoModel" @close="showInfoModel = false" />
+
+      <!-- 评分月售 -->
+      <div class="rst-order">
+        <span>评分{{shopInfo.rst.rating}}</span>
+        <span>月售{{shopInfo.rst.recent_order_num}}单</span>
+        <span>蜂鸟专送约{{shopInfo.rst.order_lead_time}}分钟</span>
+      </div>
+
+      <!-- 优惠信息 -->
+      <Activity  :activities="shopInfo.rst.activities"/>
     </div>
-    <!-- 弹窗信息 -->
-    <InfoModel :rst="shopInfo.rst" :showInfoModel="showInfoModel" @close="showInfoModel = false" />
 	</div>
 </template>
 <script>
 import InfoModel from './../../components/Shops/InfoModel'
+import Activity from './../../components/Shops/Activity'
 export default {
 	name:"shop",
 	data(){
 		return {
       shopInfo:null,
-      showInfoModel:false
+      showInfoModel:false, //弹出框
 		}
 	},
 	created() {
@@ -45,7 +56,8 @@ export default {
 		}
   },
   components:{
-    InfoModel
+    InfoModel,
+    Activity
   }
 }
 </script>
