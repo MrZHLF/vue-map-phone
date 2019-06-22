@@ -31,11 +31,15 @@
       <!-- 优惠信息 -->
       <Activity  :activities="shopInfo.rst.activities"/>
     </div>
+    <!-- 导航 -->
+    <NavBar/>
+    <router-view></router-view>
 	</div>
 </template>
 <script>
 import InfoModel from './../../components/Shops/InfoModel'
 import Activity from './../../components/Shops/Activity'
+import NavBar from './../../components/Shops/NavBar'
 export default {
 	name:"shop",
 	data(){
@@ -50,14 +54,15 @@ export default {
 	methods: {
 		getData() {
 			this.$axios(`/api/profile/batch_shop`).then(res => {
-				console.log(res)
+				// console.log(res)
 				this.shopInfo = res.data
 			})
 		}
   },
   components:{
     InfoModel,
-    Activity
+    Activity,
+    NavBar
   }
 }
 </script>
