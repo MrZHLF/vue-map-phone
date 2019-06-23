@@ -22,21 +22,82 @@
     </div>
 
     <!-- 商品分类 -->
+    <div class="menuview">
+      <!-- 左侧分类列表 -->
+      <div class="menu-wrapper" ref="menuScroll">
+        <ul>
+          <li 
+            :class="{'current':currentIndex===index}"
+            @click="selectMenu(index)" 
+            v-for="(item,index) in shopInfo.menu" :key="index">
+            <img v-if="item.icon_url" :src="item.icon_url" alt="" srcset="">
+            <span>{{item.name}}</span>
+          </li>
+        </ul>
+      </div>
+      <!-- 右侧商品内容 -->
+      <div class="foods-wrapper" ref="foodScroll">
+        <ul>
+          <li class="food-list-hook" v-for="(item,index) in shopInfo.menu" :key="index">
+            <!-- 内容标题 -->
+            <div class="category-title">
+              <strong>{{item.name}}</strong>
+              <span>{{item.description}}</span>
+            </div>
+            <!-- 商品展示 -->
+            <div class="fooddetails" v-for="(food,i) in item.foods" :key="i">
+              <!-- 左边 -->
+              <img :src="food.image_path" >
+              <!-- 右边 -->
+              <section class="fooddetails-info">
+                <h4>{{food.name}}</h4>
+                <p class="fooddetails-des">{{food.description}}</p>
+                <p class="fooddetails-sales">月售{{food.month_sales}}份 好评率{{food.satisfy_rate}}</p>
+                <div class="fooddetails-price">
+                    <span class="price">¥{{food.activity.fixed_price}}</span>
+                    <CartControll :food="food"/>
+                  </div>
+              </section>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
   </div>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
 import CartControll from './../../components//Shops/CartControll'
 export default {
   name:"goods",
   data(){
 		return {
-      shopInfo:null
+      shopInfo:null,
+      menuScroll:{}, //左侧滚动对象
+      foodScroll:{}, //右侧滚动对象
+      scrollY:0, //右侧菜单当前滚动到Y的值
+      listHeight:[], //12个区域的列表高度
+
 		}
 	},
 	created() {
 		this.getData()
-	},
+  },
+  computed:{
+    // 根据右侧滚动的位置, 确定对应的索引下标
+    currentIndex() {
+      for (let i=0;i<this.listHeight.length;i++) {
+        let height1 = this.listHeight[i];
+        let height2 = this.listHeight[i + 1];
+        if(this.scrollY >= height1 && this.scrollY <= height2) {
+          return i
+        }
+      }
+      return 0
+    }
+  },
 	methods: {
 		getData() {
 			this.$axios(`/api/profile/batch_shop`).then(res => {
@@ -46,10 +107,61 @@ export default {
             item.count =0
           })
         });
+
+        res.data.menu.forEach(menu => {
+          menu.foods.forEach(food =>{
+            food.count =0
+          })
+        });
+
         this.shopInfo = res.data
         console.log(this.shopInfo)
-			})
-		}
+        this.$nextTick(() => {
+          // DOM已经更新
+          this.initScroll();
+          //计算12个区的高度
+          this.calculateHeight()
+        });
+      })
+    },
+    initScroll() {
+      //左侧
+      this.menuScroll = new BScroll(this.$refs.menuScroll, {
+        click: true
+      });
+
+      //右侧
+      this.foodScroll = new BScroll(this.$refs.foodScroll, {
+        probeType: 3,
+        click: true
+      });
+
+      this.foodScroll.on('scroll',pos =>{
+        this.scrollY = Math.abs(Math.round(pos.y))
+      })
+    },
+    selectMenu(index) {
+      //拿到每个li标签
+      let foodlist = this.$refs.foodScroll.getElementsByClassName('food-list-hook');
+      //对应的索引值
+      let el = foodlist[index];
+      //滚动的位置
+      this.foodScroll.scrollToElement(el,250)
+
+    },
+    calculateHeight(){
+      let foodlist = this.$refs.foodScroll.getElementsByClassName('food-list-hook');
+      let height = 0;
+      
+      this.listHeight.push(height);
+
+      for(let i = 0;i < foodlist.length;i++) {
+        let item = foodlist[i];
+        height+= item.clientHeight;
+        this.listHeight.push(height)
+      }
+      console.log(this.listHeight)
+    }
   },
   components:{
     CartControll
