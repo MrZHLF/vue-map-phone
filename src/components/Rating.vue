@@ -23,11 +23,8 @@ export default {
 
       // 根据分数对星星进行处理，向下取0.5的倍数
       let score = Math.floor(this.rating * 2) /2;
-      console.log(score,'score')
       //控制半星
       let hasDecimal = score % 1 !== 0;
-        
-        console.log(hasDecimal,'hasDecimal')
       //全星
       let integer = Math.floor(score)
 
